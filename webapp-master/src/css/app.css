@@ -1,0 +1,14 @@
+.root-element {
+    height: 100vh;
+    width: 100vw;
+}
+
+.globe-container {
+    height: 100%;
+    width: 100%;
+}
+
+.message-container {
+    height: 100%;
+    width: 100%;
+}
