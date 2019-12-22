@@ -1,8 +1,8 @@
 FROM base:latest
 
 USER root
-RUN mkdir -p /home/admin/fullstack/server-master
-WORKDIR /home/admin/fullstack/server-master
-COPY server-master /home/admin/fullstack/server-master
+RUN mkdir -p /app/server
+WORKDIR /app/server
+ADD server-master /app/server
 ENTRYPOINT [ "python" ]
-CMD [ "app.py" ]
+CMD [ "app.py" ]./

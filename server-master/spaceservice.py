@@ -1,0 +1,47 @@
+from satellite import Satellite
+from threading import Thread
+
+
+class SatelliteService(Thread):
+
+    def __init__(self, input_file='active.txt', max_sats=-1):
+        Thread.__init__(self)
+        self.__input_file = input_file
+        self.__max_sats = max_sats
+        self.__satellites = []
+
+    def get_satellites(self):
+        return self.__satellites
+
+    def run(self):
+        self.__generate_data()
+
+    def __generate_satellite_data(self):
+        print('Parsing active.txt')
+        splits = open('active.txt', 'r').readlines()
+        print('active.txt parsing compelte')
+        size = 5
+        print('Generating satellites...')
+        for i in range(0, len(splits) - 1, 3):
+            satellite = Satellite(id=splits[i].replace(' ', '').replace('\n', ''), line1=splits[i+1].replace('\n', ''), line2=splits[i+2].replace('\n', ''), size=size)
+            self.__satellites.append(satellite)
+            print('Generated satellite # {}'.format(len(self.__satellites)))
+
+    def __generate_more_satellite_data(self):
+        print('Parsing TLE.txt')
+        splits = open('TLE.txt', 'r').readlines()
+        print('TLE.txt parsing complete')
+        size = 5
+        print('Generating satellites...')
+        for i in range(0, len(splits) - 1, 2):
+            satellite = Satellite(id=splits[i].replace('  ', '').split(' ')[2],
+                                  line1=splits[i].replace('\n', ''), line2=splits[i + 1].replace('\n', ''),
+                                  size=size)
+            self.__satellites.append(satellite)
+            print('Generated satellite # {}'.format(len(self.__satellites)))
+
+    def __generate_data(self):
+        if self.__input_file == 'active.txt':
+            self.__generate_satellite_data()
+        else:
+            self.__generate_more_satellite_data()
