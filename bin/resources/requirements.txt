@@ -5,7 +5,7 @@ chardet==3.0.4
 Click==7.0
 decorator==4.3.0
 enum34==1.1.6
-Flask==0.12.2
+Flask==1.0
 Flask-Cors==3.0.3
 Flask-SocketIO==3.0.2
 flatten-json==0.1.6
