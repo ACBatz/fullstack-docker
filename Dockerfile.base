@@ -1,8 +1,8 @@
 FROM centos/python-36-centos7
 
 USER root
-#ENV http_proxy 'http://proxy-lmi.global.lmco.com:80'
-#ENV https_proxy 'http://proxy-lmi.global.lmco.com:80'
-COPY server-master/requirements.txt .
+ENV http_proxy 'http://proxy-lmi.global.lmco.com:80'
+ENV https_proxy 'http://proxy-lmi.global.lmco.com:80'
+COPY ./resources/requirements.txt .
 RUN yum update -y
-RUN pip install -r requirements.txt
+RUN python -m pip install --trusted-host pypi.python.org --trusted-host pypi.org --trusted-host files.pythonhosted.org --proxy=http://proxy-lmi.global.lmco.com -r requirements.txt
