@@ -1,0 +1,4 @@
+.idea
+venv
+webapp-master/node_modules
+*.py[co]
