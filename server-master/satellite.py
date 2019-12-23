@@ -1,5 +1,6 @@
 from sgp4.earth_gravity import wgs84
 from sgp4.io import twoline2rv
+from singleton import Singleton
 import pyproj
 import math
 import numpy as np
@@ -11,8 +12,8 @@ class Satellite:
         self.id = id
         self.size = size
         self.scale = 10
-        self.ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
-        self.lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
+        self.ecef = Singleton.get_instance().get_data('ecef')
+        self.lla = Singleton.get_instance().get_data('lla')
         self.a = self._get_semi_major_axis(line2[52:63])
 
     @staticmethod

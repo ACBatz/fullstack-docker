@@ -5,23 +5,35 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import math
 import json
+import pyproj
 
 from lineofsightlibrary import do_routing
 from spaceservice import SatelliteService
 from station import Station
 from timekeeper import TimeKeeper
+from singleton import Singleton
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'development key'
 socket = SocketIO(app)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
-sat_service = SatelliteService()
+
+singleton = Singleton.get_instance()
+singleton.update_data('ecef', pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84'))
+singleton.update_data('lla', pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84'))
+sat_service = SatelliteService(input_file='TLE.txt')
 sat_service.start()
 
 
 @app.route('/')
-def hello_world():
+def root():
     return render_template('index.html')
+
+
+@app.route('/trim/<int:num>')
+def trim(num):
+    sat_service.set_max_sats(num)
+    return Response()
 
 
 def line(sats, station, time):

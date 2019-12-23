@@ -11,10 +11,15 @@ class SatelliteService(Thread):
         self.__satellites = []
 
     def get_satellites(self):
-        return self.__satellites
+        return self.__satellites[:self.__max_sats]
 
     def run(self):
         self.__generate_data()
+
+    def set_max_sats(self, num):
+        if num >= len(self.__satellites) or num <= 0:
+            num = -1
+        self.__max_sats = num
 
     def __generate_satellite_data(self):
         print('Parsing active.txt')
