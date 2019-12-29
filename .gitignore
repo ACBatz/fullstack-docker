@@ -1,4 +1,6 @@
 .idea
 venv
 webapp-master/node_modules
+webapp-master/build
+server-master/static
 *.py[co]

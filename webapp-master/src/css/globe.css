@@ -1,0 +1,9 @@
+.cesium-widget-credits {
+    visibility: hidden;
+}
+
+.cesium-widget canvas {
+    height: 95vh;
+    max-height: 100vh;
+    max-width: 80vw;
+}

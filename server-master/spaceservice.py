@@ -24,13 +24,13 @@ class SatelliteService(Thread):
     def __generate_satellite_data(self):
         print('Parsing active.txt')
         splits = open('active.txt', 'r').readlines()
-        print('active.txt parsing compelte')
+        print('active.txt parsing complete')
         size = 5
         print('Generating satellites...')
         for i in range(0, len(splits) - 1, 3):
             satellite = Satellite(id=splits[i].replace(' ', '').replace('\n', ''), line1=splits[i+1].replace('\n', ''), line2=splits[i+2].replace('\n', ''), size=size)
             self.__satellites.append(satellite)
-            print('Generated satellite # {}'.format(len(self.__satellites)))
+        print('Generated {} satellites'.format(len(self.__satellites)))
 
     def __generate_more_satellite_data(self):
         print('Parsing TLE.txt')
@@ -38,12 +38,13 @@ class SatelliteService(Thread):
         print('TLE.txt parsing complete')
         size = 5
         print('Generating satellites...')
-        for i in range(0, len(splits) - 1, 2):
+        num_lines = self.__max_sats * 2 if self.__max_sats != -1 else len(splits)
+        for i in range(0, num_lines - 1, 2):
             satellite = Satellite(id=splits[i].replace('  ', '').split(' ')[2],
                                   line1=splits[i].replace('\n', ''), line2=splits[i + 1].replace('\n', ''),
                                   size=size)
             self.__satellites.append(satellite)
-            print('Generated satellite # {}'.format(len(self.__satellites)))
+        print('Generated {} satellites'.format(len(self.__satellites)))
 
     def __generate_data(self):
         if self.__input_file == 'active.txt':
