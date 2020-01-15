@@ -98,9 +98,9 @@ time_keeper = TimeKeeper()
 @app.route('/api/satellite',methods=['POST'])
 def satellite():
     try:
-        clock_time = request.get_json()['time']
+        clock_time = request.get_json()['time'].split('.')[0]
         print('Received POST with jdate of [{}]'.format(clock_time))
-        strptime = datetime.strptime(clock_time, '%Y-%m-%dT%H:%M:%S.%f%z')
+        strptime = datetime.strptime(clock_time, '%Y-%m-%dT%H:%M:%S')
         time_keeper.set_time(strptime)
         start = datetime.now()
         sats_ = list(filter(lambda y: y is not None, map(lambda x: x.get_position(strptime), sat_service.get_satellites())))
