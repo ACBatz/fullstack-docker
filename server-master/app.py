@@ -3,6 +3,8 @@ from datetime import datetime
 from flask import Flask, render_template, Response, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from multiprocessing import Pool, cpu_count
+from itertools import repeat
 import math
 import json
 import pyproj
@@ -12,6 +14,7 @@ from spaceservice import SatelliteService
 from station import Station
 from timekeeper import TimeKeeper
 from singleton import Singleton
+from satellite import Satellite
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'development key'
@@ -103,7 +106,9 @@ def satellite():
         strptime = datetime.strptime(clock_time, '%Y-%m-%dT%H:%M:%S')
         time_keeper.set_time(strptime)
         start = datetime.now()
-        sats_ = list(filter(lambda y: y is not None, map(lambda x: x.get_position(strptime), sat_service.get_satellites())))
+        with Pool(cpu_count()) as pool:
+            sats_ = pool.starmap(Satellite.get_position, zip(sat_service.get_satellites(), repeat(strptime)))
+            sats_ = list(filter(lambda x: x is not None, sats_))
         stats_ = list(map(lambda x: x.get_position(), stations))
         stop = datetime.now()
         print('Completed propagation in [{}] seconds and returned [{}] based on filter'.format((stop - start).total_seconds(), len(sats_)))
