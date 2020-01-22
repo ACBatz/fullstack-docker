@@ -21,13 +21,10 @@ then
     rm -f server-master/static/precache-manifest.*
     cp webapp-master/build/precache-manifest.* server-master/static/
     cp -f webapp-master/build/index.html server-master/templates/
-    exit 0
 fi
-echo "npm build failed"
-exit 1
 
 #docker build --tag base --file Dockerfile.base .
 
-#docker build --tag batzel-globe --file Dockerfile.app .
+docker build --tag batzel-globe-v2 --file Dockerfile.app .
 
-#docker run -d -p 5000:5000 --name batzel-globe batzel-globe
+docker run -d -p 5000:5000 --name batzel-globe-v2 batzel-globe-v2
